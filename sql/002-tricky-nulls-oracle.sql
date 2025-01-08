@@ -1,4 +1,4 @@
--- 1) Get rows that have NULLs in field ID
+-- 1) Get rows that have NULLs
 create table taba (id integer);
 insert into taba values (1);
 insert into taba values (2);
