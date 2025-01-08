@@ -1,0 +1,10 @@
+-- 1) FROM / JOIN
+-- 2*) CONNECT BY (in case of Oracle database)
+-- 2) WHERE
+-- 3) GROUP BY / agg functions
+-- 4) HAVING
+-- 5) Analytic functions
+-- 6) SELECT
+-- 7) DISTINCT
+-- 8) ORDER BY
+-- 9) LIMIT
