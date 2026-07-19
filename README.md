@@ -15,4 +15,5 @@ Each post is stored as a self-contained folder with text, images, code examples,
 | Year | No | Title | Status | Topics | Technologies |
 |---|---:|---|---|---|---|
 | 2025 | 001 | SQL Order of Execution | published | sql, databases | sql, databases |
-| 2026 | 002 | SQL Count Star vs Count Column | published | sql, databases | sql, databases |
+| 2026 | 002 | COUNT(*) vs COUNT(column) | published | sql, databases, nulls | postgresql, clickhouse, oracle, docker |
+| 2026 | 003 | How I Get Better Results from OpenAI Codex | published | ai, developer-productivity, data-engineering, code-review | openai-codex, apache-airflow, mcp, figma |
