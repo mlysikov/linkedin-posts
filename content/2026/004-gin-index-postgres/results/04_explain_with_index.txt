@@ -1,0 +1,22 @@
+Plan after creating the partial GIN trigram index
+ANALYZE
+ matching_products
+-------------------
+              3487
+(1 row)
+
+                                                                     QUERY PLAN
+----------------------------------------------------------------------------------------------------------------------------------------------------
+ Bitmap Heap Scan on products  (cost=179.90..219.12 rows=10 width=220) (actual time=0.823..4.173 rows=3487.00 loops=1)
+   Recheck Cond: (((attributes ->> 'description'::text) ~~* '%wireless%'::text) AND (category = 'electronics'::text) AND (status = 'active'::text))
+   Heap Blocks: exact=3091
+   Buffers: shared hit=3135
+   ->  Bitmap Index Scan on products_description_trgm_idx  (cost=0.00..179.90 rows=10 width=0) (actual time=0.614..0.615 rows=3487.00 loops=1)
+         Index Cond: ((attributes ->> 'description'::text) ~~* '%wireless%'::text)
+         Index Searches: 1
+         Buffers: shared hit=44
+ Planning:
+   Buffers: shared hit=12
+ Planning Time: 0.167 ms
+ Execution Time: 4.260 ms
+(12 rows)

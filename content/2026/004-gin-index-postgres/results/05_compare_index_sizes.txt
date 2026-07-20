@@ -1,0 +1,15 @@
+Comparing partial GIN trigram index with a full GIN trigram index
+psql:/sql/05_compare_index_sizes.sql:3: NOTICE:  extension "pg_trgm" already exists, skipping
+CREATE EXTENSION
+psql:/sql/05_compare_index_sizes.sql:12: NOTICE:  relation "products_description_trgm_idx" already exists, skipping
+CREATE INDEX
+DROP INDEX
+psql:/sql/05_compare_index_sizes.sql:14: NOTICE:  index "products_description_full_trgm_idx" does not exist, skipping
+CREATE INDEX
+             index_name             | index_size |  bytes
+------------------------------------+------------+----------
+ products_description_trgm_idx      | 10 MB      | 10649600
+ products_description_full_trgm_idx | 23 MB      | 24477696
+(2 rows)
+
+DROP INDEX

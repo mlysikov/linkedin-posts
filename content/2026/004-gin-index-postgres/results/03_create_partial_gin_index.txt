@@ -1,0 +1,9 @@
+Creating the partial GIN trigram index used in the post
+CREATE EXTENSION
+psql:/sql/03_create_partial_gin_index.sql:3: NOTICE:  extension "pg_trgm" already exists, skipping
+CREATE INDEX
+ANALYZE
+          index_name           | index_size
+-------------------------------+------------
+ products_description_trgm_idx | 10 MB
+(1 row)

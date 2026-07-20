@@ -1,0 +1,54 @@
+Optional comparison: jsonb_ops vs jsonb_path_ops
+psql:/sql/06_jsonb_operator_classes.sql:3: NOTICE:  index "products_attributes_jsonb_ops_idx" does not exist, skipping
+DROP INDEX
+DROP INDEX
+psql:/sql/06_jsonb_operator_classes.sql:4: NOTICE:  index "products_attributes_jsonb_path_ops_idx" does not exist, skipping
+CREATE INDEX
+CREATE INDEX
+ANALYZE
+               index_name               | index_size |  bytes
+----------------------------------------+------------+---------
+ products_attributes_jsonb_path_ops_idx | 2456 kB    | 2514944
+ products_attributes_jsonb_ops_idx      | 3800 kB    | 3891200
+(2 rows)
+
+Containment query: both operator classes support @>; planner usually prefers the smaller path_ops index
+                                                                           QUERY PLAN
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=5287.39..5287.40 rows=1 width=8) (actual time=4.054..4.054 rows=1.00 loops=1)
+   Buffers: shared hit=1087 read=855
+   ->  Bitmap Heap Scan on products  (cost=106.90..5281.93 rows=2186 width=0) (actual time=0.713..3.986 rows=1924.00 loops=1)
+         Recheck Cond: (attributes @> '{"name": "Mechanical Keyboard", "brand": "KeyMaster"}'::jsonb)
+         Heap Blocks: exact=1924
+         Buffers: shared hit=1087 read=855
+         ->  Bitmap Index Scan on products_attributes_jsonb_path_ops_idx  (cost=0.00..106.36 rows=2186 width=0) (actual time=0.573..0.574 rows=1924.00 loops=1)
+               Index Cond: (attributes @> '{"name": "Mechanical Keyboard", "brand": "KeyMaster"}'::jsonb)
+               Index Searches: 1
+               Buffers: shared hit=18
+ Planning:
+   Buffers: shared hit=33
+ Planning Time: 0.099 ms
+ Execution Time: 4.070 ms
+(14 rows)
+
+Key-exists query: jsonb_ops supports ?, jsonb_path_ops does not
+                                                                       QUERY PLAN
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=697.40..697.41 rows=1 width=8) (actual time=0.621..0.621 rows=1.00 loops=1)
+   Buffers: shared hit=190 read=112
+   ->  Bitmap Heap Scan on products  (cost=63.09..696.96 rows=177 width=0) (actual time=0.077..0.609 rows=300.00 loops=1)
+         Recheck Cond: (attributes ? 'promo'::text)
+         Heap Blocks: exact=300
+         Buffers: shared hit=190 read=112
+         ->  Bitmap Index Scan on products_attributes_jsonb_ops_idx  (cost=0.00..63.04 rows=177 width=0) (actual time=0.019..0.019 rows=300.00 loops=1)
+               Index Cond: (attributes ? 'promo'::text)
+               Index Searches: 1
+               Buffers: shared hit=2
+ Planning:
+   Buffers: shared hit=6
+ Planning Time: 0.056 ms
+ Execution Time: 0.630 ms
+(14 rows)
+
+DROP INDEX
+DROP INDEX

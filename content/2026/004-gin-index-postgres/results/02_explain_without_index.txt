@@ -1,0 +1,26 @@
+Plan before creating the GIN trigram index
+psql:/sql/02_explain_without_index.sql:3: NOTICE:  index "products_description_trgm_idx" does not exist, skipping
+psql:/sql/02_explain_without_index.sql:4: NOTICE:  index "products_description_full_trgm_idx" does not exist, skipping
+DROP INDEX
+DROP INDEX
+ANALYZE
+ matching_products
+-------------------
+              3487
+(1 row)
+
+                                                                     QUERY PLAN
+----------------------------------------------------------------------------------------------------------------------------------------------------
+ Gather  (cost=1000.00..12877.00 rows=10 width=220) (actual time=0.141..34.219 rows=3487.00 loops=1)
+   Workers Planned: 2
+   Workers Launched: 2
+   Buffers: shared hit=538 read=8838
+   ->  Parallel Seq Scan on products  (cost=0.00..11876.00 rows=4 width=220) (actual time=0.161..31.628 rows=1162.33 loops=3)
+         Filter: ((category = 'electronics'::text) AND (status = 'active'::text) AND ((attributes ->> 'description'::text) ~~* '%wireless%'::text))
+         Rows Removed by Filter: 98838
+         Buffers: shared hit=538 read=8838
+ Planning:
+   Buffers: shared hit=15
+ Planning Time: 0.056 ms
+ Execution Time: 34.320 ms
+(12 rows)
