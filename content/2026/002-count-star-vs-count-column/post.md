@@ -41,9 +41,9 @@ Most posts about `COUNT(*)` vs `COUNT(column)` stop at `NULL`. That part is impo
 - `COUNT(*)` counts rows.
 - `COUNT(value)` counts non-NULL values.
 
-The part I see discussed much less often: empty strings.
+🧩 The part I see discussed much less often: empty strings.
 
-Here is a tiny example:
+🧪 Here is a tiny example:
 
 ```sql
 CREATE TABLE count_demo (
@@ -58,7 +58,7 @@ INSERT INTO count_demo (id, value) VALUES
   (4, 'SQL');
 ```
 
-Now compare:
+🔢 Now compare:
 
 ```sql
 SELECT
@@ -69,7 +69,7 @@ FROM count_demo;
 
 `COUNT(*)` counts every row in the result. `COUNT(value)` counts only rows where `value` is not `NULL`.
 
-So far, so good. But this is where many reports quietly go wrong: developers treat “non-NULL” as “filled in”.
+So far, so good. But this is where many reports quietly go wrong: developers treat “non-NULL” as “filled in” ⚠️
 
 In PostgreSQL and ClickHouse, `''` is just a normal empty string. It is not `NULL`, so `COUNT(value)` includes it. The same is true for `' '`, a string that contains one space. It may look empty in a UI, but it is still a value.
 
@@ -83,7 +83,7 @@ COUNT(value)
 
 It answers: “How many values are not NULL?” It does not answer: “How many values are actually filled in?”
 
-For PostgreSQL and ClickHouse, I usually write:
+🧹 For PostgreSQL and ClickHouse, I usually write:
 
 ```sql
 COUNT(NULLIF(TRIM(value), ''))
@@ -97,12 +97,15 @@ For Oracle, because `''` is already `NULL`, the equivalent idea is:
 COUNT(CASE WHEN TRIM(value) IS NOT NULL THEN 1 END)
 ```
 
-The memorable rule:
+📌 The memorable rule:
 
 `COUNT(*)` counts rows.
 `COUNT(column)` counts non-NULL values.
 If you want filled values, normalize whitespace first.
 
-Have empty strings ever changed a number you thought was just about NULLs?
+💬 Have empty strings ever changed a number you thought was just about NULLs?
+
+📁 Source materials for this post are available in my GitHub repo:
+https://github.com/mlysikov/linkedin-posts/tree/main/content/2026/002-count-star-vs-count-column
 
 #SQL #PostgreSQL #ClickHouse #Oracle #DataEngineering

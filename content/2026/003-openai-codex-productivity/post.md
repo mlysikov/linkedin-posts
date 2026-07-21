@@ -54,11 +54,11 @@ Do not rewrite the DAG unless there is a real bug.
 Finish with prioritized findings and exact file references.
 ```
 
-What changed?
+What changed? 👇
 
 The prompt now includes the goal, relevant files, constraints, review criteria, and a clear definition of done.
 
-For large or ambiguous tasks, I switch to Plan Mode first. Codex reads the repo, asks clarifying questions, compares options, and proposes a plan. Only after I confirm the direction does it start implementing. That saves me from the most expensive failure mode: a fast solution to the wrong problem.
+For large or ambiguous tasks, I switch to Plan Mode first. Codex reads the repo, asks clarifying questions, compares options, and proposes a plan. Only after I confirm the direction does it start implementing. That saves me from the most expensive failure mode: a fast solution to the wrong problem. 🧭
 
 Then I move repeated instructions out of the prompt:
 
@@ -70,20 +70,22 @@ My daily shortcut is simple:
 
 ```text
 Use @ to point Codex at the exact files.
-Use $ to force the right Skill.
+Use $ to force the right Skill. 🎯
 ```
 
 Example:
 
 ```text
-Use $code-review on @path/to/your_dag.py
-and check any SQL or Python it depends on.
+Use $code-review on @path/to/your_dag.py and check any SQL or Python it depends on.
 ```
 
-One more underrated feature: Continue in New Task. When I am unsure whether to refactor, patch, or add tests first, I branch the context into a new task and explore the option there. The original thread stays clean, and I can compare approaches without losing the reasoning trail.
+One more underrated feature: Continue in New Task. When I am unsure whether to refactor, patch, or add tests first, I branch the context into a new task and explore the option there. The original thread stays clean, and I can compare approaches without losing the reasoning trail. 🌱
 
 This is the workflow that made Codex feel less like autocomplete and more like a teammate with a very good memory: precise prompts, Plan Mode for ambiguity, `AGENTS.md` for project defaults, Skills for repeatable expertise, MCP for external context, and task branching for experiments.
 
-What Codex habit has saved you the most time?
+💬 What Codex habit has saved you the most time?
+
+📁 Source materials for this post are available in my GitHub repo:
+https://github.com/mlysikov/linkedin-posts/tree/main/content/2026/003-openai-codex-productivity
 
 #OpenAI #Codex #DataEngineering #SoftwareEngineering #AI

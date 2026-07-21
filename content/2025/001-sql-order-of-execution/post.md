@@ -33,7 +33,7 @@ assets:
 
 Knowing the order in which query blocks are executed can help you write more efficient SQL queries.
 
-Interesting fact: in Oracle Database, the `CONNECT BY` condition is evaluated after `FROM` but before the `WHERE` clause.
+💡 Interesting fact: in Oracle Database, the `CONNECT BY` condition is evaluated after `FROM` but before the `WHERE` clause.
 
 Logical order:
 
@@ -47,5 +47,8 @@ Logical order:
 8. `DISTINCT`
 9. `ORDER BY`
 10. `LIMIT`
+
+Source materials for this post are available in my GitHub repo:
+https://github.com/mlysikov/linkedin-posts/tree/main/content/2025/001-sql-order-of-execution
 
 #SQL #Databases #QueryProcessing #OrderOfExecution #SQLTips

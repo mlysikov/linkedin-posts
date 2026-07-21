@@ -33,7 +33,7 @@ assets:
 
 # Postgres GIN Indexes: Use Them on Purpose
 
-A B-Tree will not save you from `ILIKE '%wireless%'`.
+🔎 A B-Tree will not save you from `ILIKE '%wireless%'`.
 
 Most PostgreSQL indexing advice starts with B-Tree, and for good reason. It is great for equality, ranges, ordering, joins, and "next N rows".
 
@@ -43,11 +43,11 @@ It is an inverted index. Instead of one sortable value per row, it stores search
 
 The practical rule I use:
 
-- B-Tree for scalar equality, ranges, and sorting.
-- GIN for `jsonb @>`, key existence, arrays, full-text search, and substring search with `pg_trgm`.
-- For `jsonb`, choose the operator class deliberately: `jsonb_ops` is flexible; `jsonb_path_ops` is smaller for containment, but it does not support key-exists operators like `?`.
+✅ B-Tree for scalar equality, ranges, and sorting.
+✅ GIN for `jsonb @>`, key existence, arrays, full-text search, and substring search with `pg_trgm`.
+⚠️ For `jsonb`, choose the operator class deliberately: `jsonb_ops` is flexible; `jsonb_path_ops` is smaller for containment, but it does not support key-exists operators like `?`.
 
-Here is the product-search pattern I wish more teams used.
+🛒 Here is the product-search pattern I wish more teams used.
 
 We only search active electronics, so we do not index every product:
 
@@ -75,14 +75,17 @@ WHERE
 
 Without the index, PostgreSQL scans the table, extracts `description` from every `jsonb`, and checks the pattern row by row.
 
-With the index, the plan switches to `Bitmap Index Scan` plus `Bitmap Heap Scan`. GIN finds candidate row IDs using trigrams from "wireless"; then PostgreSQL fetches those rows and rechecks the predicate.
+🚀 With the index, the plan switches to `Bitmap Index Scan` plus `Bitmap Heap Scan`. GIN finds candidate row IDs using trigrams from "wireless"; then PostgreSQL fetches those rows and rechecks the predicate.
 
-The partial part matters. The index only contains active electronics, so it is smaller, cheaper to update, and faster to search than a full trigram index. The catch: the query predicate must match that slice.
+📌 The partial part matters. The index only contains active electronics, so it is smaller, cheaper to update, and faster to search than a full trigram index. The catch: the query predicate must match that slice.
 
 One mistake I learned the slow way: a GIN index on the whole `jsonb` column will not help an `ILIKE` on `attributes ->> 'description'`. That expression is text. Index it with `gin_trgm_ops`, or change the query.
 
 GIN is not a PostgreSQL turbo button. It is a specialized index for specific data types and operators. Used on purpose, it can turn a scan over hundreds of thousands of JSON documents into a small candidate lookup.
 
-Where have you seen GIN help the most: `jsonb`, arrays, full-text search, or trigram search?
+💬 Where have you seen GIN help the most: `jsonb`, arrays, full-text search, or trigram search?
+
+📁 Source materials for this post are available in my GitHub repo:
+https://github.com/mlysikov/linkedin-posts/tree/main/content/2026/004-gin-index-postgres
 
 #PostgreSQL #SQL #DataEngineering #DatabasePerformance #Indexes
