@@ -1,0 +1,24 @@
+services:
+  clickhouse:
+    image: clickhouse/clickhouse-server:25.8.28
+    container_name: demo-clickhouse
+    environment:
+      CLICKHOUSE_DB: demo
+      CLICKHOUSE_USER: demo
+      CLICKHOUSE_PASSWORD: Password1
+      CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: "1"
+    ports:
+      - "8123:8123"
+      - "9000:9000"
+    volumes:
+      - clickhouse-data:/var/lib/clickhouse
+      - ./sql:/sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "clickhouse-client --user demo --password Password1 --query 'SELECT 1'"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+volumes:
+  clickhouse-data:

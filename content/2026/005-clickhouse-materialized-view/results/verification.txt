@@ -1,0 +1,56 @@
+
+===== sql/01_create_databases.sql =====
+Step 01: raw and mart databases are ready
+
+===== sql/02_create_source_table.sql =====
+Step 02: raw.orders source table is ready
+
+===== sql/03_insert_existing_orders_before_mv.sql =====
+Step 03: existing source rows inserted before MV creation
+2026-07-18	2	3	49.99
+
+===== sql/04_create_target_table.sql =====
+Step 04: mart.daily_sales target table is ready
+
+===== sql/05_create_materialized_view.sql =====
+Step 05: Materialized View is ready, but old rows were not replayed
+0
+
+===== sql/06_insert_new_orders.sql =====
+Step 06: new source rows inserted after MV creation
+
+===== sql/07_check_daily_sales.sql =====
+Step 07: mart.daily_sales was filled automatically by the MV
+2026-07-20	2	3	89.48
+2026-07-21	2	4	165.99
+The rows inserted before MV creation are still only in raw.orders
+2026-07-18	2	3
+
+===== sql/08_insert_more_orders.sql =====
+Step 08: another source INSERT was processed by the MV
+
+===== sql/09_check_daily_sales_again.sql =====
+Step 09: mart.daily_sales after the second source INSERT
+2026-07-20	2	3	89.48
+2026-07-21	3	6	264.99
+2026-07-22	1	4	29
+
+===== sql/10_direct_insert_target_table.sql =====
+Step 10: direct target insert changed mart.daily_sales only
+2026-07-20	2	3	89.48
+2026-07-21	3	6	264.99
+2026-07-22	1	4	29
+2026-07-23	99	999	12345.67
+0
+
+===== sql/11_update_delete_do_not_replay.sql =====
+Step 11: source mutations finished; the target aggregate was not replayed
+source recomputed now	2026-07-20	1	10	199.9
+target still has old MV result	2026-07-20	2	3	89.48
+
+===== sql/12_populate_demo.sql =====
+Step 12a: POPULATE processed existing rows into the MV-owned storage
+2026-07-10	2	3	50
+Step 12b: after creation, the same MV also processes future INSERTs
+2026-07-10	2	3	50
+2026-07-11	1	5	17.5
